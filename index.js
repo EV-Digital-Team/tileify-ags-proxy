@@ -12,7 +12,7 @@ app.set('port', port);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, resp) => {
-  resp.sendfile('public/index.html');
+  resp.sendFile('public/index.html');
 });
 
 app.get('/tiles/:z/:x/:y', (req, resp, next) => {
@@ -42,6 +42,7 @@ app.get('/tiles/:z/:x/:y', (req, resp, next) => {
   const tiler = new TileifyAGS(agsServerUrl, urlParamConfig, pixelRatio);
   let url = tiler.getTileUrl(x, y, z);
 
+  console.log(url)
   if (redirect) {
     resp.redirect(url);
   } else {
