@@ -1,7 +1,7 @@
 const path = require('path');
 
 const express = require('express');
-const request = require('request');
+const got = require('got');
 const TileifyAGS = require('tileify-ags');
 
 const app = express();
@@ -42,7 +42,6 @@ app.get('/tiles/:z/:x/:y', (req, resp, next) => {
   const tiler = new TileifyAGS(agsServerUrl, urlParamConfig, pixelRatio);
   let url = tiler.getTileUrl(x, y, z);
 
-  console.log(url)
   if (redirect) {
     resp.redirect(url);
   } else {
@@ -52,8 +51,8 @@ app.get('/tiles/:z/:x/:y', (req, resp, next) => {
         headers: { Referer: referer },
       };
     }
-
-    req.pipe(request(url).on("error", next)).pipe(resp);
+    
+    req.pipe(got.stream(url).on("error", next)).pipe(resp);
   }
 });
 
